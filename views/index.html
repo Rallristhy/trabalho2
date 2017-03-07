@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html ng-app="bovespaApp">
+<head>
+	<meta charset="utf-8">
+
+	<!-- Estilos -->
+	<link rel="shortcut icon" href="resources/images/favicon.png" type="image/x-icon" />
+  	<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  	<link rel="stylesheet" type="text/css" href="bower_components/font-awesome/css/font-awesome.min.css">
+  	<link rel="stylesheet" type="text/css" href="views/css/bovespa.css">
+
+  	<!-- Scripts -->
+  	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+  	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="bower_components/angular/angular.min.js"></script>
+	<script src="node_modules/angular-utils-pagination/dirPagination.js"></script>
+  	<script src="views/scripts/bovespa.js"></script>
+  	<script src="socket.io/socket.io.js"></script>
+
+  	<title>Bovespa</title>
+</head>
+<body ng-controller="bovespaListController as bovespaList">
+
+	<header>
+
+		<div class="container">
+			<div class="row rowHeader">
+				<ul>
+					<li ng-repeat="header in dataHeader.bovespaHeaderData">
+						
+						<div class="nome col-xs-6 col-md-6 col-lg-6">
+							<p>
+								<i class="fa fa-arrow-circle-right"></i>
+								<label>Nome do Arquivo: </label>
+								<small>{{header.h_nome_arquivo}}</small>
+
+							</p>
+						</div>
+						
+						<div class="origem col-xs-6 col-md-6 col-lg-6">
+							<p>
+								<i class="fa fa-arrow-circle-right"></i>
+								<label>Cod. Origem: </label>
+								<small>{{header.h_codigo_da_origem}}</small>
+							</p>
+						</div>
+
+						<div class="data col-xs-12 col-md-12 col-lg-12">
+							<p>
+								<i class="fa fa-calendar"></i>
+								<label>Data Geracao: </label>
+								<small>{{header.h_data_geracao_do_arquivo}}</small>
+							</p>
+						</div>
+
+					</li>
+				</ul>
+			</div>
+		</div>
+
+	</header>
+
+	<section>
+
+		<div class="container selecionaArquivo">
+			<div class="row">
+				<div class="col-xs-6 col-md-6 col-lg-6">
+					<i class="fa fa-files-o"></i>
+					<label>Arquivos: </label>
+					<small>
+						<select class="selectpicker" ng-model="selecionaArquivo" ng-options="x for x in arquivos" ng-change="capturaArquivoSelecionado(selecionaArquivo)">
+						</select>
+					</small>
+				</div>
+				<div class="col-xs-6 col-md-6 col-lg-6 notification">
+
+					<div class="dropdown">
+						<button class="btn btn-primary dropdown-toggle botaonotificacao" data-toggle="dropdown" ng-click="resetnotificacao()">
+						  <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+						  <strong><small ng-model="contadornotificacao" class="contadornotificacao">{{contadornotificacao}}</small></strong>
+						  <!-- <span class="caret"></span> -->
+						</button>
+						<ul class="dropdown-menu">
+			    			<li class="containernotificacoes" ng-repeat="notificacao in notificacoes | orderBy: '-horario'"><i class="fa fa-file" aria-hidden="true"></i>{{notificacao.status}}{{notificacao.horario}}</li>
+			  			</ul>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+		<div class="container">
+			<div class="row rowCotacao">
+
+				<table class="table table-hover table-condensed">
+					<thead class="thead-inverse">
+				        <tr>
+				            <!-- <th>Tip. Reg.</th> -->
+				            <th>Data do Pregão</th>
+				            <!-- <th>Cod. BDI</th> -->
+				            <th>Cod. Negociação</th>
+				            <th>Tipo Mercado</th>
+				            <th>Repres</th>
+				            <th>Espec</th>
+				            <!-- <th>Prazo</th> -->
+				            <th>Moeda</th>
+				            <th>Preço Abert</th>
+				            <th>Preço Máx</th>
+				            <th>Preço Min</th>
+				            <th>Preço Méd</th>
+				            <th>Preço Últ. Neg.</th>
+				            <th>Preço Melhor Compra </th>
+				            <th>Preço Melhor Venda</th>
+				            <th>Preço para o Mercado</th>
+				        </tr>
+				    </thead>
+				    <tbody>
+				        <tr dir-paginate="cotacao in dataCotacao.bovespaCotacaoData | itemsPerPage:100">
+				            <td>{{cotacao.c_data_do_pregao}}</td>
+				            <td>{{cotacao.c_codigo_de_negociacao_do_papel}}</td>
+				            <td>{{cotacao.c_tipo_de_mercado}}</td>
+				            <td>{{cotacao.c_nomres}}</td>
+				            <td>{{cotacao.c_especificacao_do_papel}}</td>
+				            <td>{{cotacao.c_moeda_de_referencia}}</td>
+				            <td>{{cotacao.c_preabe}}</td>
+
+				            <td>{{cotacao.c_premax}}</td>
+				            <td>{{cotacao.c_premin}}</td>
+				            <td>{{cotacao.c_premed}}</td>
+				            <td>{{cotacao.c_preult}}</td>
+				            <td>{{cotacao.c_preofc}}</td>
+				            <td>{{cotacao.c_preofv}}</td>
+				            <td>{{cotacao.c_preexe}}</td>
+				            
+				        </tr>
+				    </tbody>
+				</table>
+
+				<dir-pagination-controls max-size="20" boundary-links="true"></dir-pagination-controls>
+
+			</div>
+		</div>
+
+	</section>
+
+	<footer>
+	
+		<div class="container rodape">
+
+		<div class="nome col-xs-4 col-md-4 col-lg-4">
+			<label>Trabalho Construção de Software II</label>
+		</div>
+
+		<div class="nome col-xs-4 col-md-4 col-lg-4">
+			<label>Alunos: Rallristhy, Thales</label>
+		</div>
+
+		<div class="nome col-xs-4 col-md-4 col-lg-4">
+			<label>Universidade Federal de Mato Grosso do Sul</label>
+		</div>
+		
+	</footer>
+
+</body>
+</html>
