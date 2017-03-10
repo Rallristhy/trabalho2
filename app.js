@@ -14,6 +14,8 @@ const fs = require('fs');
 /* Importando Componente responsável pela manipulação e monitoração de pastas e arquivos */
 const chokidar = require('chokidar');
 
+const SocketIOFileUploadServer = require('socketio-file-upload');
+
 /* Mapeando caminhos para visibilidade nas views */
 app.use("/bower_components",  express.static(__dirname + '/bower_components'));
 app.use("/node_modules",  express.static(__dirname + '/node_modules'));
@@ -241,10 +243,17 @@ monitor.on('unlink', function(excluiArquivo) {
 /* Estabelecendo comunicação socketIO */
 io.on('connection', function(socket){
 
+	var siofuServer = new SocketIOFileUploadServer();
+
+	siofuServer.dir = dirArquivos;
+
+	console.log(siofuServer);
+
 	/* Informa ao servidor o IP que conectou na aplicação */
  	console.log(socket.handshake.address.substring(7, 20)+" ID: "+socket.id+" entrou...");
 
  	/* Serviço que recebe o arquivo selecionado na view faz o parse e envia de volta */
+ 	//https://github.com/vote539/socketio-file-upload/blob/master/demo/app.js
 	socket.on('arquivoSelecionado', function(arquivo) {
 
 		fs.readFile(dirArquivos+arquivo, function (err, data) {

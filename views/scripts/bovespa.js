@@ -3,6 +3,9 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
   
   /* Declaração do socketio no cliente */
   var socket = io();
+  var uploader = new SocketIOFileUpload(socket);
+
+  uploader.listenOnInput(document.getElementById("siofu_input"));
 
   /* Delcaração de variáveis */
   $scope.dataHeader = [];
@@ -12,6 +15,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
   $scope.notificacoes = [];
 
   $scope.contadornotificacao = 0;
+
 
   /* 
   * Busca Informações da rota /filesCargaInicial no servidor 
