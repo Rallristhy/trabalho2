@@ -243,11 +243,19 @@ monitor.on('unlink', function(excluiArquivo) {
 /* Estabelecendo comunicação socketIO */
 io.on('connection', function(socket){
 
-	var siofuServer = new SocketIOFileUploadServer();
+	var uploader = new SocketIOFileUploadServer();
 
-	siofuServer.dir = dirArquivos;
+	uploader.dir = dirArquivos;
 
-	console.log(siofuServer);
+	uploader.on("start", function(event){
+    	console.log("start"+event);
+	});
+
+	uploader.on("saved", function(event){
+    	console.log("saved"+event);
+	});
+
+	uploader.listen(socket);
 
 	/* Informa ao servidor o IP que conectou na aplicação */
  	console.log(socket.handshake.address.substring(7, 20)+" ID: "+socket.id+" entrou...");

@@ -5,7 +5,30 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
   var socket = io();
   var uploader = new SocketIOFileUpload(socket);
 
-  uploader.listenOnInput(document.getElementById("siofu_input"));
+  uploader.listenOnInput(document.getElementById("file_input"));
+
+  uploader.addEventListener("start", function(event){
+    $('.progresso').css({"display": "inline"});
+    console.log("start");
+
+  });
+
+  uploader.addEventListener("progress", function(event){
+    
+    var percent = event.bytesLoaded / event.file.size * 100;
+    console.log("File is", percent.toFixed(2), "percent loaded");
+    $scope.progresso = percent.toFixed(2);
+
+    $scope.$apply();
+
+  });
+
+  uploader.addEventListener("complete", function(event){
+    $scope.progresso = 0;
+    $scope.$apply();
+    $('.progresso').css({"display": "none"});
+    console.log("complete");
+  });
 
   /* Delcaração de variáveis */
   $scope.dataHeader = [];

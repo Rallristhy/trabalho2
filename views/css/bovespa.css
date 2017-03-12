@@ -65,6 +65,18 @@ section .selecionaArquivo {
 
 }
 
+section select {
+    color: black;
+}
+
+section label.selecionaArquivo-label, select {
+    font-family: "OpenSans-Light";
+}
+
+section label.selecionaArquivo-icon, select {
+    margin-right: 15px;
+}
+
 section .table{
 	background: linear-gradient(to left, white, white );
 
@@ -81,16 +93,12 @@ section .rowCotacao{
 	padding-top: 60px;
 }
 
-section select{
-	color: black;
-}
-
 section .notification {
 	margin-top: -6px;
 	text-align: right;
 }
 
-section .contadornotificacao {
+section .contadornotificacao, .botaofile {
 	position: relative;
     top: -7px;
     left: -2px;
@@ -98,7 +106,7 @@ section .contadornotificacao {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, .45);
 }
 
-section .botaonotificacao {
+section .botaonotificacao, .botaofile {
     background: rgba(9, 79, 125, .9);
     border-color: rgba(9, 79, 125, .9);
 }
@@ -118,8 +126,19 @@ section .containernotificacoes {
 section .dropdown-menu {
     position:absolute;
     right:0px;
-    left: 95px;
+    left: -52px;
     padding-left: 30px;
+}
+
+section .file-up[type='file'] {
+    display: none;
+}
+
+section .progresso {
+    display: none;
+    position: absolute;
+    top: 2px;
+    left: 65px;
 }
 
 .nome:hover{

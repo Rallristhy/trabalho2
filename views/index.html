@@ -24,8 +24,6 @@
 
 	<header>
 
-		<input type="file" id="siofu_input" />
-
 		<div class="container">
 			<div class="row rowHeader">
 				<ul>
@@ -50,7 +48,7 @@
 
 						<div class="data col-xs-12 col-md-12 col-lg-12">
 							<p>
-								<i class="fa fa-calendar"></i>
+								<i class="fa fa-calendar" ></i>
 								<label>Data Geracao: </label>
 								<small>{{header.h_data_geracao_do_arquivo}}</small>
 							</p>
@@ -67,15 +65,28 @@
 
 		<div class="container selecionaArquivo">
 			<div class="row">
-				<div class="col-xs-6 col-md-6 col-lg-6">
-					<i class="fa fa-files-o"></i>
-					<label>Arquivos: </label>
-					<small>
-						<select class="selectpicker" ng-model="selecionaArquivo" ng-options="x for x in arquivos" ng-change="capturaArquivoSelecionado(selecionaArquivo)">
-						</select>
-					</small>
+
+				<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+					<i class="fa fa-files-o selecionaArquivo-icon">
+
+						<label class="selecionaArquivo-label">Arquivos: 
+
+							<small>
+								<select class="selectpicker" ng-model="selecionaArquivo" ng-options="x for x in arquivos" ng-change="capturaArquivoSelecionado(selecionaArquivo)">
+								</select>
+							</small>
+
+						</label>
+
+						<label for='file_input' class="btn btn-primary btn-file botaofile" >
+							<i class="fa fa-folder-open-o" aria-hidden="true"></i>
+							<input type="file" class="file-up" id="file_input" multiple="true" />
+							<span><progress class="progresso" ng-model="progresso" value={{progresso}} max="100"></progress></span>
+						</label>
+					</i>
 				</div>
-				<div class="col-xs-6 col-md-6 col-lg-6 notification">
+
+				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 notification">
 
 					<div class="dropdown">
 						<button class="btn btn-primary dropdown-toggle botaonotificacao" data-toggle="dropdown" ng-click="resetnotificacao()">
@@ -84,7 +95,7 @@
 						  <!-- <span class="caret"></span> -->
 						</button>
 						<ul class="dropdown-menu">
-			    			<li class="containernotificacoes" ng-repeat="notificacao in notificacoes | orderBy: '-horario'"><i class="fa fa-file" aria-hidden="true"></i>{{notificacao.status}}{{notificacao.horario}}</li>
+			    			<li class="containernotificacoes" ng-repeat="notificacao in notificacoes | orderBy: '-horario'"><i class="fa fa-file" aria-hidden="true"></i>{{notificacao.status}} {{notificacao.horario}}</li>
 			  			</ul>
 					</div>
 
