@@ -88,9 +88,11 @@ section .thead-inverse{
 
 
 }
-
-section .rowCotacao{
-	padding-top: 60px;
+.chart{
+	
+    position: relative;
+    padding-top:50px;
+    
 }
 
 section .notification {
@@ -181,7 +183,7 @@ footer {
 }
 
 footer .rodape {
-    padding-top: 15px;
+    padding-top: 20px;
 
 }
 
