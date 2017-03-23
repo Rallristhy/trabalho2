@@ -18,14 +18,15 @@ body {
 /* Style Header */
 header {
 	width: 100%; /*Pegar a largura da tela inteira*/
-	height: 145px;
+	height: 144px;
 	background: linear-gradient(to right, black, rgba(9, 79, 125, .9) 30%, black  100%);
 	z-index: 2; /*Trazer para frente*/
-	position: fixed;
+	position: relative;
 }
 
 header .container {
 	position: relative;
+    padding-top: 10px;
 }
 
 header .rowHeader {
@@ -48,7 +49,7 @@ header li {
 /* Style Header */
 section {
 	position: relative;
-	padding-top: 145px;
+	padding-top: 0px;
 	
 }
 
@@ -94,8 +95,6 @@ section.chart{
     position: relative;
     padding-top:20px;
    
-
-    
 }
 
 
