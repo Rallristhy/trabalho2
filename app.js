@@ -14,7 +14,11 @@ const fs = require('fs');
 /* Importando Componente responsável pela manipulação e monitoração de pastas e arquivos */
 const chokidar = require('chokidar');
 
+/* Importando Componente responsável pelo upload de arquivos */
 const SocketIOFileUploadServer = require('socketio-file-upload');
+
+/* Importando sqlite3 DB */
+const sqlite3 = require('sqlite3').verbose();
 
 /* Mapeando caminhos para visibilidade nas views */
 app.use("/bower_components",  express.static(__dirname + '/bower_components'));
@@ -366,6 +370,11 @@ io.on('connection', function(socket){
 /* Rota Padrão */
 app.get ('/', function (request, response){
 	response.sendFile(__dirname + '/views/index.html');
+});
+
+/* Rota Seleciona Arquivo */
+app.get ('/select', function (request, response){
+	response.sendFile(__dirname + '/views/select.html');
 });
 
 /* Rota para carga inicial no select */

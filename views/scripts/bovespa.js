@@ -39,7 +39,6 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
 
   $scope.contadornotificacao = 0;
 
-
   /* 
   * Busca Informações da rota /filesCargaInicial no servidor 
   * para dar carga inicial na table
@@ -55,7 +54,6 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
   }, function errorCallback(response) {
     console.log(response.data + " Status: " + response.status + " - " + response.statusText);
   });
-
 
   /* 
   * Busca Informações da rota /dataBovespa no servidor 
@@ -134,5 +132,51 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
 
   });
 
+
+  /* Gráfico */
+  var myChart = Highcharts.chart('container', {
+
+    title: {
+      text: 'Cotações Históricas Bovespa'
+    },
+
+    subtitle: {
+      text: 'Valores de Abertura',                
+    },
+
+    xAxis: {
+     type: 'linear',
+     allowDecimals: false,
+   },
+
+   yAxis: {
+    title: {
+      text: 'Valores em R$',
+      type: 'linear',
+    }
+  },
+
+  legend: {
+    layout: 'vertical',
+    align: 'right',
+    verticalAlign: 'middle'
+  },
+
+  plotOptions: {
+    line: {
+      dataLabels: {
+        enabled: true,
+      },
+      enableMouseTracking: false,
+    },
+  },
+  
+  //Aqui serao inseridas as informações dos valores de abertura
+  series: [{
+    name:'Petrobras',
+    data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+    color: '#90ed7d' ,
+  }]            
+  });
 
 }]);
