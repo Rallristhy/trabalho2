@@ -17,9 +17,6 @@
 	<script src="node_modules/socketio-file-upload/client.js"></script>
   	<script src="views/scripts/bovespa.js"></script>
   	<script src="socket.io/socket.io.js"></script>
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-   	<script src="https://code.highcharts.com/highcharts.js"></script> 
-</head>
 
   	<title>Bovespa</title>
 </head>
@@ -41,16 +38,13 @@
 							</p>
 						</div>
 						
-						<div class="origem col-xs-5 col-md-5 col-lg-5">
+						<div class="origem col-xs-6 col-md-6 col-lg-6">
 							<p>
 								<i class="fa fa-arrow-circle-right"></i>
 								<label>Cod. Origem: </label>
 								<small>{{header.h_codigo_da_origem}}</small>
 							</p>
 						</div>
-
-						<button type="button" onclick="select.html">Click Me!</button>
-				
 
 						<div class="data col-xs-12 col-md-12 col-lg-12">
 							<p>
@@ -104,16 +98,63 @@
 			    			<li class="containernotificacoes" ng-repeat="notificacao in notificacoes | orderBy: '-horario'"><i class="fa fa-file" aria-hidden="true"></i>{{notificacao.status}} {{notificacao.horario}}</li>
 			  			</ul>
 					</div>
+
 				</div>
 			</div>
-		</div>
-		
-		<div class="chart">		
-			<div id="container">			
 
-			</div>	
 		</div>
-		
+		<div class="container">
+			<div class="row rowCotacao">
+
+				<table class="table table-hover table-condensed">
+					<thead class="thead-inverse">
+				        <tr>
+				            <!-- <th>Tip. Reg.</th> -->
+				            <th>Data do Pregão</th>
+				            <!-- <th>Cod. BDI</th> -->
+				            <th>Cod. Negociação</th>
+				            <th>Tipo Mercado</th>
+				            <th>Repres</th>
+				            <th>Espec</th>
+				            <!-- <th>Prazo</th> -->
+				            <th>Moeda</th>
+				            <th>Preço Abert</th>
+				            <th>Preço Máx</th>
+				            <th>Preço Min</th>
+				            <th>Preço Méd</th>
+				            <th>Preço Últ. Neg.</th>
+				            <th>Preço Melhor Compra </th>
+				            <th>Preço Melhor Venda</th>
+				            <th>Preço para o Mercado</th>
+				        </tr>
+				    </thead>
+				    <tbody>
+				        <tr dir-paginate="cotacao in dataCotacao.bovespaCotacaoData | itemsPerPage:100">
+				            <td>{{cotacao.c_data_do_pregao}}</td>
+				            <td>{{cotacao.c_codigo_de_negociacao_do_papel}}</td>
+				            <td>{{cotacao.c_tipo_de_mercado}}</td>
+				            <td>{{cotacao.c_nomres}}</td>
+				            <td>{{cotacao.c_especificacao_do_papel}}</td>
+				            <td>{{cotacao.c_moeda_de_referencia}}</td>
+				            <td>{{cotacao.c_preabe}}</td>
+
+				            <td>{{cotacao.c_premax}}</td>
+				            <td>{{cotacao.c_premin}}</td>
+				            <td>{{cotacao.c_premed}}</td>
+				            <td>{{cotacao.c_preult}}</td>
+				            <td>{{cotacao.c_preofc}}</td>
+				            <td>{{cotacao.c_preofv}}</td>
+				            <td>{{cotacao.c_preexe}}</td>
+				            
+				        </tr>
+				    </tbody>
+				</table>
+
+				<dir-pagination-controls max-size="20" boundary-links="true"></dir-pagination-controls>
+
+			</div>
+		</div>
+
 	</section>
 
 	<footer>
