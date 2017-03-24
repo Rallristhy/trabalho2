@@ -9,14 +9,14 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
 
   uploader.addEventListener("start", function(event){
     $('.progresso').css({"display": "inline"});
-    console.log("start");
+    console.log(event.file.name);
 
   });
 
   uploader.addEventListener("progress", function(event){
     
     var percent = event.bytesLoaded / event.file.size * 100;
-    console.log("File is", percent.toFixed(2), "percent loaded");
+    //console.log("File is", percent.toFixed(2), "percent loaded");
     $scope.progresso = percent.toFixed(2);
 
     $scope.$apply();
@@ -112,6 +112,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
     $scope.$apply();
   }); 
 
+
   /*
   * Serviço que monitora a adição ou remoção de arquivos no servidor,
   * se ocorrer altera a cor do botão incrementa a notificação e add a
@@ -131,7 +132,6 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
     $scope.$apply();
 
   });
-
 
   /* Gráfico */
   var myChart = Highcharts.chart('container', {
