@@ -39,33 +39,65 @@ var dirArquivos = "resources/files/";
 /* Declação do monitor de diretório */
 var monitor = chokidar.watch(dirArquivos, { ignored: /^\./, persistent: true });
 
-/****** SQLITE DB /******/
+/************************************************ SQLITE DB ************************************************/
 function createDb(){
 	console.log('Criando o DB');
-	db = new sqlite3.Database('bovespa.sqlite3',createTable );
+	db = new sqlite3.Database('bovespa.sqlite3', createTable);
 }
-
-/*Metodo para poder executar comandos sql; CRIANDO UMA TABELA CHAMADA AULA COM campo info do tipo text
-insertRows parametro para inserir apos criar a tabela*/
 
 function createTable(){
 	console.log('create Table');
-	db.run('CREATE TABLE IF NOT EXISTS bovespa (acao TEXT, data TEXT)');
+	db.run('CREATE TABLE IF NOT EXISTS bovespa (acao TEXT, data TEXT, preco_abertura REAL, preco_maximo REAL, preco_minimo REAL, preco_medio REAL)');
 }
 
-function insertRows (bv_acao, bv_data){
-	console.log('insert Rows');	
-	var stmt = db.prepare ('INSERT INTO bovespa VALUES (?, ?)'); 
-	// for(var i = 0; i < 10; i++){	
-		stmt.run (bv_acao, bv_data);
-
-	// }
-
-	stmt.finalize();
+function closeDB(){
+	console.log('closeDB');
 	db.close();
 }
 
+function insertRows (informacoes_arquivo){
+
+	console.log('insert Rows');
+
+	var stmt = db.prepare ('INSERT INTO bovespa VALUES (?, ?, ?, ?, ?, ?)'); 
+
+	informacoes_arquivo.forEach(function ( tupla ) {
+		stmt.run (
+			tupla.acao,
+			tupla.data_lanc,
+			tupla.preco_abertura,
+			tupla.preco_maximo,
+			tupla.preco_minimo,
+			tupla.preco_medio);
+	});
+
+	stmt.finalize(queryAcoes);
+
+}
+
+function queryAcoes(){
+
+	console.log('queryAcoes');
+
+	var i = 0;
+
+	db.all('SELECT DISTINCT bovespa.acao FROM bovespa', function(err, rows){
+
+		rows.forEach(function(row){
+			i++;
+		});
+
+		console.log(i);
+
+		closeDB();
+	});
+
+}
+
 createDb();
+queryAcoes();
+
+/***********************************************************************************************************/
 
 /* Criando Objetos para guardar as informações do  */
 class bovespaHeader {
@@ -120,119 +152,6 @@ class bovespaTrailer {
   }
 };
 
-/* Faz a leitura da pasta verifica o arquivo com maior ano e mês */
-fs.readdir(dirArquivos, function(erro, arquivos){
-
-	/* Vetor temporário para armazenar o campo anomes para pegar o maior ano e mes  */
-	var tmp = [];
-
-	/* Se não encontrar o diretório retorna o erro para o servidor */
-	if(erro){
-		console.log("Caminho não encontrado! "+erro);
-	}
-
-	/* Guarda os arquivos do diretório no vetor "arquivosData" */
-	else {
-		arquivos.forEach(function (arquivo) {
-
-			/* Nomes dos arquivos e anomes */
-			tmp.push({name: arquivo, anomes: arquivo.substring(12,16)+arquivo.substring(10,12)});
-
-		});
-	}
-	
-	/* Ordena o vetor por anomes */
-	tmp.sort(function(a,b) {
-   		return a.anomes - b.anomes;
-	});
-
-	/* Faz a leitura do arquivo com maior ano mes */
-	fs.readFile(dirArquivos+tmp[tmp.length-1].name, function (err, data) {
-
-		/* Tratamento caso dê algum erro ao abrir/ler o arquivo */
-		if (err) {
-			return console.error(err);
-		}
-
-	   	/*Convertendo informação do arquivo em string*/
-	   	var text = data.toString();
-
-	   	/*Quebra linha a linha e quarda em um vetor*/
-	   	var lines = text.split( '\n' );
-
-	   	/*Percorrendo linha a linha do Arquivo*/
-	   	lines.forEach(function ( line ) {
-
-	  		/*Fazendo a leitura do Header*/
-			if (line.substring(0, 2) == '00'){
-				var h_tipo_registro = line.substring(0, 2);
-			 	var h_nome_arquivo = line.substring(2, 15);
-			 	var h_codigo_da_origem = line.substring(15, 23);
-			 	var h_data_geracao_do_arquivo = line.substring(23, 31);
-			 	var h_reserva = line.substring(31, 245);
-			 	
-			 	var bovespah = new bovespaHeader(h_tipo_registro, h_nome_arquivo, h_codigo_da_origem, h_data_geracao_do_arquivo, h_reserva);
-				bovespaHeaderData.push(bovespah);
-				
-			}
-
-			/*Fazendo a leitura do Cotações*/
-			else if (line.substring(0, 2) == '01'){
-				var c_tipo_registro = parseInt(line.substring(0, 2));
-				var c_data_do_pregao = parseInt(line.substring(2, 10));
-				var c_codigo_bdi = line.substring(10, 12);
-				var c_codigo_de_negociacao_do_papel = line.substring(12, 24);
-				var c_tipo_de_mercado = line.substring(24, 27);
-				var c_nomres = line.substring(27, 39);
-				var c_especificacao_do_papel = line.substring(39, 49);
-				var c_prazot = line.substring(49, 52);
-				var c_moeda_de_referencia = line.substring(52, 56);
-				var c_preabe = (parseInt((line.substring(56, 69)))/100).toFixed(2);
-				var c_premax = (parseInt((line.substring(69, 82)))/100).toFixed(2);
-				var c_premin = (parseInt((line.substring(82, 95)))/100).toFixed(2);
-				var c_premed = (parseInt((line.substring(95, 108)))/100).toFixed(2);
-				var c_preult = (parseInt((line.substring(108, 121)))/100).toFixed(2);
-				var c_preofc = (parseInt((line.substring(121, 134)))/100).toFixed(2);
-				var c_preofv = (parseInt((line.substring(134, 147)))/100).toFixed(2);
-				var c_totneg = line.substring(147, 152);
-				var c_quatot = line.substring(152, 170);
-				var c_voltot = (parseInt((line.substring(170, 188)))/100).toFixed(2);
-				var c_preexe = (parseInt((line.substring(188, 201)))/100).toFixed(2);
-				var c_idopc = line.substring(201, 202);
-				var c_datven = line.substring(202, 210);
-				var c_fatcot = line.substring(210, 217);
-				var c_ptoexe = line.substring(217, 230);
-				var c_codisi = line.substring(230, 242);
-				var c_dismes = line.substring(242, 245);
-
-				var bovespac = new bovespaCotacao(c_tipo_registro, c_data_do_pregao, c_codigo_bdi, c_codigo_de_negociacao_do_papel, c_tipo_de_mercado, c_nomres, c_especificacao_do_papel, c_prazot, c_moeda_de_referencia, c_preabe, c_premax, c_premin, c_premed, c_preult, c_preofc, c_preofv, c_totneg, c_quatot, c_voltot, c_preexe, c_idopc , c_datven, c_fatcot, c_ptoexe, c_codisi, c_dismes);
-				bovespaCotacaoData.push(bovespac);
-			}
-
-			/*Fazendo a leitura do Trailer*/
-			else if (line.substring(0, 2) == '99'){
-				var t_tipo_registro = line.substring(0, 2);
-				var t_nome_arquivo = line.substring(2, 15);
-				var t_codigo_da_origem = line.substring(15, 23);
-				var t_data_geracao_do_arquivo = line.substring(23, 31);
-				var t_total_registros = parseInt(line.substring(31, 42));
-				var t_reserva = line.substring(42, 245);
-
-				var bovespat = new bovespaTrailer(t_tipo_registro, t_nome_arquivo, t_codigo_da_origem, t_data_geracao_do_arquivo, t_total_registros, t_reserva);
-				bovespaTrailerData.push(bovespat);
-			}
-			
-
-		});
-		bovespaData.push(bovespaHeaderData);
-		bovespaData.push(bovespaCotacaoData);
-		bovespaData.push(bovespaTrailerData);
-	});
-
-
-
-});
-
 /* Monitora novos arquivos */
 monitor.on('add', function(novoArquivo) {
 
@@ -266,13 +185,13 @@ monitor.on('unlink', function(excluiArquivo) {
 	/* Envia o para o cliente o vetor atualizado*/
 	io.emit('serviceMonitorArquivos', arquivosData);
 	io.emit('serviceMonitorArquivosAlerta', {
-												nome: excluiArquivo.substring(dirArquivos.length), 
-												status: 'excluído',
-												horario : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()});
+											 nome: excluiArquivo.substring(dirArquivos.length), 
+											 status: 'excluído',
+											 horario : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()});
 
 });
 
-/* Estabelecendo comunicação socketIO */
+/************************************************ SOCKETIO *************************************************/
 io.on('connection', function(socket){
 
 	var uploader = new SocketIOFileUploadServer();
@@ -285,7 +204,10 @@ io.on('connection', function(socket){
 	});
 
 	uploader.on("saved", function(event){
+
     	console.log(event.file.name);
+
+    	var informacoes_arquivo = [];
 
     	fs.readFile(dirArquivos+event.file.name, function (err, data) {
 
@@ -342,11 +264,18 @@ io.on('connection', function(socket){
 					var c_codisi = line.substring(230, 242);
 					var c_dismes = line.substring(242, 245);
 
-					if(c_codigo_de_negociacao_do_papel != null && c_data_do_pregao != null){
-						insertRows (c_codigo_de_negociacao_do_papel, c_data_do_pregao);
-					}
+					informacoes_arquivo.push({
+						acao: c_codigo_de_negociacao_do_papel, 
+						data_lanc: c_data_do_pregao,
+						preco_abertura: c_preabe,
+						preco_maximo: c_premax,
+						preco_minimo: c_premin,
+						preco_medio: c_premed
+					});
 					
 				}
+
+
 
 				/*Fazendo a leitura do Trailer*/
 				else if (line.substring(0, 2) == '99'){
@@ -360,11 +289,9 @@ io.on('connection', function(socket){
 				}
 
 			});
-		   	console.log("terminou");
-			bovespaData.push(bovespaHeaderData);
-			bovespaData.push(bovespaCotacaoData);
-			bovespaData.push(bovespaTrailerData);
-		   	socket.emit('arquivoSelecionado', bovespaData);
+
+		   	insertRows (informacoes_arquivo);
+
 		});
 
 	});
@@ -375,7 +302,6 @@ io.on('connection', function(socket){
  	console.log(socket.handshake.address.substring(7, 20)+" ID: "+socket.id+" entrou...");
 
  	/* Serviço que recebe o arquivo selecionado na view faz o parse e envia de volta */
- 	//https://github.com/vote539/socketio-file-upload/blob/master/demo/app.js
 	socket.on('arquivoSelecionado', function(arquivo) {
 
 		fs.readFile(dirArquivos+arquivo, function (err, data) {
@@ -476,6 +402,8 @@ io.on('connection', function(socket){
    	});
 
 });
+
+/***********************************************************************************************************/
 
 /* Rota Padrão */
 app.get ('/', function (request, response){

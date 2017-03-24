@@ -17,6 +17,7 @@
 	<script src="node_modules/socketio-file-upload/client.js"></script>
   	<script src="views/scripts/bovespa.js"></script>
   	<script src="socket.io/socket.io.js"></script>
+  	<script src="https://code.highcharts.com/highcharts.js"></script>
 
   	<title>Bovespa</title>
 </head>
@@ -153,6 +154,12 @@
 				<dir-pagination-controls max-size="20" boundary-links="true"></dir-pagination-controls>
 
 			</div>
+		</div>
+
+		<div class="chart" ng-controller="bovespaListController as bovespaList">		
+			<div id="container">			
+
+			</div>	
 		</div>
 
 	</section>
