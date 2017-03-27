@@ -167,6 +167,25 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
 
     var myChart = Highcharts.chart('container', {
 
+        tooltip:{
+        shared: true,
+        useHTML: true,
+        headerFormat: '<small>{point.key}</small><table>',
+        pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
+            '<td style="text-align: left"><b>{point.y} R$</b></td></tr>',
+        footerFormat: '</table>',
+        valueDecimals: 2,
+        backgroundColor: {
+            linearGradient: [0, 0, 0, 60],
+            stops: [
+                [0, '#FFFFFF'],
+                [1, '#E0E0E0']
+            ]
+        },
+        borderWidth: 1,
+        borderColor: '#AAA'
+      },
+
       title: {
         text: 'Cotações Históricas Bovespa'
       },
@@ -207,7 +226,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           dataLabels: {
             enabled: true,
           },
-          enableMouseTracking: false,
+          enableMouseTracking: true,
         },
       },
 
@@ -215,7 +234,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
       {
         name: 'Preço Abertura',
         data: valoresAbertura,
-        color: '#90ed7d'
+        color: 'green'
       },
       {
         name: 'Preço Máximo',
@@ -239,3 +258,4 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
   
 
 }]);
+
