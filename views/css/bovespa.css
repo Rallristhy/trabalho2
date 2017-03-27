@@ -70,8 +70,12 @@ section select {
     color: black;
 }
 
-section label.selecionaArquivo-label, select {
+section label.selecionaAno-label, label.selecionaMes-label, label.selecionaAcao-label, select {
     font-family: "OpenSans-Light";
+}
+
+section label.selecionaAcao-label, label.selecionaMes-label {
+    display: none;
 }
 
 section label.selecionaArquivo-icon, select {

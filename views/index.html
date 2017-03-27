@@ -76,11 +76,29 @@
 
 				<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
 					<i class="fa fa-files-o selecionaArquivo-icon">
-
-						<label class="selecionaArquivo-label">Arquivos: 
+						
+						<label class="selecionaAno-label">Ano: 
 
 							<small>
-								<select class="selectpicker" ng-model="selecionaArquivo" ng-options="x for x in arquivos" ng-change="capturaArquivoSelecionado(selecionaArquivo)">
+								<select class="selectpicker" ng-model="selecionaAnoAcao" ng-options="y for y in anosAcoes" ng-change="capturaAnoAcaoSelecionado(selecionaAnoAcao)">
+								</select>
+							</small>
+
+						</label>
+
+						<label class="selecionaMes-label">Mês: 
+
+							<small>
+								<select class="selectpicker" ng-model="selecionaMesAcao" ng-options="m for m in mesesAcoes" ng-change="capturaMesAcaoSelecionado(selecionaMesAcao)">
+								</select>
+							</small>
+
+						</label>
+
+						<label class="selecionaAcao-label">Ações: 
+
+							<small>
+								<select class="selectpicker" ng-model="selecionaAcao" ng-options="x for x in acoes" ng-change="capturaAcaoSelecionada(selecionaAcao)">
 								</select>
 							</small>
 

@@ -71,7 +71,8 @@ function insertRows (informacoes_arquivo){
 			tupla.preco_medio);
 	});
 
-	stmt.finalize(queryAcoes);
+	stmt.finalize();
+	closeDB();
 
 }
 
@@ -80,22 +81,21 @@ function queryAcoes(){
 	console.log('queryAcoes');
 
 	var i = 0;
+	var acoes = [];
 
 	db.all('SELECT DISTINCT bovespa.acao FROM bovespa', function(err, rows){
 
-		rows.forEach(function(row){
-			i++;
+		rows.forEach(function ( tupla ) {
+			acoes.push(tupla.acao);
 		});
 
-		console.log(i);
+		io.emit('rall', acoes);
 
-		closeDB();
 	});
 
 }
 
 createDb();
-queryAcoes();
 
 /***********************************************************************************************************/
 
@@ -204,7 +204,7 @@ io.on('connection', function(socket){
 	});
 
 	uploader.on("saved", function(event){
-
+		console.log('Entrou no saved');
     	console.log(event.file.name);
 
     	var informacoes_arquivo = [];
@@ -290,7 +290,7 @@ io.on('connection', function(socket){
 
 			});
 
-		   	insertRows (informacoes_arquivo);
+		   	insertRows(informacoes_arquivo);
 
 		});
 
@@ -300,6 +300,62 @@ io.on('connection', function(socket){
 
 	/* Informa ao servidor o IP que conectou na aplicação */
  	console.log(socket.handshake.address.substring(7, 20)+" ID: "+socket.id+" entrou...");
+
+	var acoesAno = [];
+
+	db.all('SELECT DISTINCT SUBSTR(data, 1, 4) ano FROM bovespa', function(err, rows){
+
+		rows.forEach(function ( tupla ) {
+			acoesAno.push(tupla.ano);
+		});
+
+
+		io.emit('anoAcao', acoesAno);
+	});
+
+	socket.on('buscaMeses', function(ano) {
+
+		var acoesMes = [];
+
+		db.all('SELECT DISTINCT SUBSTR(data, 5, 2) mes  FROM bovespa WHERE SUBSTR(data, 1, 4) = '+'"'+ano+'"', function(err, rows){
+			rows.forEach(function ( tupla ) {
+				acoesMes.push(tupla.mes);
+			});
+
+			io.emit('buscaMeses', acoesMes);
+		});
+
+	});
+
+	socket.on('buscaAcoes', function(ano, mes) {
+
+		var acoes = [];
+
+		db.all('SELECT DISTINCT acao FROM bovespa WHERE SUBSTR(data, 1, 4) = '+'"'+ano+'" AND SUBSTR(data, 5, 2) = '+'"'+mes+'"', function(err, rows){
+			rows.forEach(function ( tupla ) {
+				acoes.push(tupla.acao);
+			});
+
+			io.emit('buscaAcoes', acoes);
+		});
+
+	});
+
+	socket.on('buscaValores', function(acao, ano, mes) {
+
+		var acoesValores = [];
+
+		db.all('SELECT * FROM bovespa WHERE SUBSTR(data, 1, 4) = '+'"'+ano+'" AND SUBSTR(data, 5, 2) = '+'"'+mes+'"'+' AND acao = '+'"'+acao+'" ORDER BY data', function(err, rows){
+		
+			rows.forEach(function ( tupla ) {
+				acoesValores.push(tupla.preco_abertura);
+			});
+
+			io.emit('buscaValores', acoesValores, acao);
+
+		});
+
+	});
 
  	/* Serviço que recebe o arquivo selecionado na view faz o parse e envia de volta */
 	socket.on('arquivoSelecionado', function(arquivo) {
@@ -413,11 +469,6 @@ app.get ('/', function (request, response){
 /* Rota Seleciona Arquivo */
 app.get ('/select', function (request, response){
 	response.sendFile(__dirname + '/views/select.html');
-});
-
-/* Rota para carga inicial no select */
-app.get('/filesCargaInicial', function(request, response){
-	response.send(arquivosData);
 });
 
 /* Rota para carga inicial da table */

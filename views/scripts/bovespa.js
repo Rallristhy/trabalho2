@@ -4,6 +4,9 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
   /* Declaração do socketio no cliente */
   var socket = io();
   var uploader = new SocketIOFileUpload(socket);
+  var anoSelecionado;
+  var mesSelecionado;
+  var acaoSelecionado;
 
   uploader.listenOnInput(document.getElementById("file_input"));
 
@@ -38,22 +41,6 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
   $scope.notificacoes = [];
 
   $scope.contadornotificacao = 0;
-
-  /* 
-  * Busca Informações da rota /filesCargaInicial no servidor 
-  * para dar carga inicial na table
-  */
-  $http({method: 'GET', url: '/filesCargaInicial'}).then(function successCallback(data) {
-
-      if(data.data.length == 0){
-        alert("Nenhum Arquivo no Servidor!");
-      }
-      /* Recebe o objeto e guarda em arquivos */
-      $scope.arquivos = data.data;
-
-  }, function errorCallback(response) {
-    console.log(response.data + " Status: " + response.status + " - " + response.statusText);
-  });
 
   /* 
   * Busca Informações da rota /dataBovespa no servidor 
@@ -91,6 +78,35 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
     }
     
   };
+
+  $scope.capturaAnoAcaoSelecionado = function(anoAcaoSelecionada){
+
+    $('.selecionaMes-label').css({"display": "inline"});
+
+    anoSelecionado = anoAcaoSelecionada;
+
+    socket.emit('buscaMeses', anoAcaoSelecionada);
+    
+  };
+
+  $scope.capturaMesAcaoSelecionado = function(mesAcaoSelecionada){
+
+    $('.selecionaAcao-label').css({"display": "inline"});
+
+    mesSelecionado = mesAcaoSelecionada;
+
+    socket.emit('buscaAcoes', anoSelecionado, mesAcaoSelecionada);
+    
+  };
+
+  $scope.capturaAcaoSelecionada = function(acaoSelecionada){
+
+    console.log(acaoSelecionada);
+
+    socket.emit('buscaValores', acaoSelecionada, anoSelecionado, mesSelecionado);
+    
+  };
+  
   
   /* Escutando serviceMonitorArquivos no servidor recebendo a lista de arquivos atualizada */
   socket.on("serviceMonitorArquivos", function(arquivosData){
@@ -133,50 +149,79 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
 
   });
 
-  /* Gráfico */
-  var myChart = Highcharts.chart('container', {
-
-    title: {
-      text: 'Cotações Históricas Bovespa'
-    },
-
-    subtitle: {
-      text: 'Valores de Abertura',                
-    },
-
-    xAxis: {
-     type: 'linear',
-     allowDecimals: false,
-   },
-
-   yAxis: {
-    title: {
-      text: 'Valores em R$',
-      type: 'linear',
-    }
-  },
-
-  legend: {
-    layout: 'vertical',
-    align: 'right',
-    verticalAlign: 'middle'
-  },
-
-  plotOptions: {
-    line: {
-      dataLabels: {
-        enabled: true,
-      },
-      enableMouseTracking: false,
-    },
-  },
-  
-  //Aqui serao inseridas as informações dos valores de abertura
-  series: [{
-    name:'Petrobras',
-    data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
-    color: '#90ed7d' ,
-  }]            
+  socket.on('anoAcao', function(anoAcao){
+    $scope.anosAcoes = anoAcao;
+    $scope.$apply();
   });
+
+  socket.on('buscaMeses', function(mesesAcao){
+    $scope.mesesAcoes = mesesAcao;
+    $scope.$apply();
+  });
+
+  socket.on('buscaAcoes', function(acao){
+    $scope.acoes = acao;
+    $scope.$apply();
+  });
+
+  socket.on('buscaValores', function(valores, acao){
+    $scope.$apply();
+
+    var myChart = Highcharts.chart('container', {
+
+      title: {
+        text: 'Cotações Históricas Bovespa'
+      },
+
+      subtitle: {
+        text: 'Valores de Abertura',                
+      },
+
+      xAxis: {
+       type: 'linear',
+       allowDecimals: false,
+     },
+
+     yAxis: {
+      title: {
+        text: 'Valores em R$',
+        type: 'linear',
+      }
+    },
+
+    legend: {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'middle'
+    },
+
+    plotOptions: {
+      line: {
+        dataLabels: {
+          enabled: true,
+        },
+        enableMouseTracking: false,
+      },
+    },
+    
+    //Aqui serao inseridas as informações dos valores de abertura
+
+
+
+
+    series: [{
+      name: acao,
+      data: valores,
+      color: '#90ed7d' ,
+    }]            
+    });
+
+  });
+
+  // var tst = [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4];
+  
+
+  /* Gráfico */
+  
 
 }]);
