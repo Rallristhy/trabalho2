@@ -186,14 +186,14 @@ io.on('connection', function(socket){
 					var c_codisi = line.substring(230, 242);
 					var c_dismes = line.substring(242, 245);
 
-					informacoes_arquivo.push({
-						acao: c_codigo_de_negociacao_do_papel, 
-						data_lanc: c_data_do_pregao,
-						preco_abertura: c_preabe,
-						preco_maximo: c_premax,
-						preco_minimo: c_premin,
-						preco_medio: c_premed
-					});
+					// informacoes_arquivo.push({
+					// 	acao: c_codigo_de_negociacao_do_papel, 
+					// 	data_lanc: c_data_do_pregao,
+					// 	preco_abertura: c_preabe,
+					// 	preco_maximo: c_premax,
+					// 	preco_minimo: c_premin,
+					// 	preco_medio: c_premed
+					// });
 					
 				}
 
@@ -212,7 +212,7 @@ io.on('connection', function(socket){
 
 			});
 
-		   	insertRows(informacoes_arquivo);
+		   	// insertRows(informacoes_arquivo);
 
 		});
 
