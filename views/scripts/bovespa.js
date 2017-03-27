@@ -164,16 +164,14 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           color: 'navy',
           fontWeight: 'bold'
         },
-        text: 'Cotações Históricas Bovespa',
+        text: 'Ação - ' + acao,
       },
       subtitle: {
         style: {
           color: 'red',
           fontFamily: 'Courier New',
-          fontStyle: 'italic',
           fontSize: '2em'
-        },
-        text: 'Ação - '+acao,                
+        }                
       },
       xAxis: {
         type: 'linear',
