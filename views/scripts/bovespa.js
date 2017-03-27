@@ -140,7 +140,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
     /* Criação do Gráfico */
     var myChart = Highcharts.chart('container', {
 
-      /*Exibe uma caixa com legenda de cada informação ao se passar o ponteiro em cima do valor*/
+      /*Exibe uma caixa com legenda de cada informação ao se passar o ponteiro em cima do valor
       tooltip:{
         shared: true,
         useHTML: true,
@@ -159,6 +159,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
         borderWidth: 1,
         borderColor: '#AAA'
       },
+       */
       title: {
         style: {
           color: 'navy',
@@ -225,38 +226,42 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
       },
       /*Cria o primeiro gráfico com os Valores Ilustrativos, para serem clicados*/
       series: [{
-        name: 'Preço de Abertura',
+        name: '1 - Preço de Abertura',
+        color: 'green',
         data:[{
-          name: 'Preço Abertura',
+          name: '1 - Preço Abertura',
           drilldown: 'abertura',
-          y:2,
+          y:1,
           color: 'green',
         }]
       },
       {
-        name: 'Preço Maximo',
+        name: '2 - Preço Maximo',
+        color: '#1A5276',
         data:[{
           name: 'Preço Máximo',
           drilldown: 'maximo',
-          y : 5,
+          y : 2,
           color: '#1A5276',
         }]
       },
       {
-        name: 'Preço Minimo',
+        name: '3 - Preço Minimo',
+        color: '#6C3483',
         data:[{
           name: 'Preço Mínimo',
           drilldown: 'minimo',
-          y:1,
+          y:3,
           color: '#6C3483',
         }]
       },
       {
-        name:'Preço Medio',
+        name:'4 - Preço Medio',
+        color: '#D35400',
         data:[{
           name: 'Preço Médio',
           drilldown: 'medio',
-          y:3,
+          y:4,
           color: '#D35400',
         }]
       }],
