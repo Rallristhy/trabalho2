@@ -136,150 +136,31 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
 
   /* Recebe os valores de acordo com a seleção de ação, ano, mês */
   socket.on('buscaValores', function(valoresAbertura, valoresMaximo, valoresMinimo, valoresMedio, diasLanc, acao){
-
-    /* Criação do Gráfico */
-    var myChart = Highcharts.chart('container', {
-
-      title: {
-        style: {
-          color: 'navy',
-          fontWeight: 'bold'
-        },
-        text: 'Ação - ' + acao,
-      },
-      subtitle: {
-        style: {
-          color: 'red',
-          fontFamily: 'Courier New',
-          fontSize: '2em'
-        }                
-      },
-      xAxis: {
-        type: 'linear',
-        allowDecimals: false,
-        crosshair: true,
-        categories: diasLanc,
-        title: {
-          text: 'Dias'
-        }
-      },
-      plotOptions: {
-        series: {
-          allowPointSelect: true,
-        }
-      },
-      yAxis: {
-        title: {
-          text: 'Valores em R$',
-          type: 'linear',
-        }
-      },
-      /*Box de legenda com as informações de cada Valor, informando que deve-se clicar para obter o valor detalhado de cada preço*/
-      legend: {
-        title: {
-          text: 'Preços<br/><span style="font-size: 10px; color: red; font-weight: normal">(Clique ao lado para ESCOLHER um preço)</span>',
-          style: {
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-          }
-        },
-        layout: 'vertical',
-        align: 'right',
-        enabled: true,
-        verticalAlign: 'middle'
-      },
-      plotOptions: {
-        line: {
-          dataLabels: {
-            enabled: true,
-          },
-          enableMouseTracking: true,
-        },
-      },
-      /* Imprimir e salvar em imagens o gráfico*/
-      exporting: {
-        buttons: {
-          contextButton: {
-            text: 'Download',             
-          }
-        }
-      },
-      // Cria o primeiro gráfico com os Valores Ilustrativos, para serem clicados
-      series: [{
-        name: '1 - Preço de Abertura',
-        color: 'green',
-        data:[{
-          name: '1 - Preço Abertura',
-          drilldown: 'abertura',
-          y:1,
-          color: 'green',
-        }]
-      },
-      {
-        name: '2 - Preço Maximo',
-        color: '#1A5276',
-        data:[{
-          name: 'Preço Máximo',
-          drilldown: 'maximo',
-          y : 2,
-          color: '#1A5276',
-        }]
-      },
-      {
-        name: '3 - Preço Minimo',
-        color: '#6C3483',
-        data:[{
-          name: 'Preço Mínimo',
-          drilldown: 'minimo',
-          y:3,
-          color: '#6C3483',
-        }]
-      },
-      {
-        name:'4 - Preço Medio',
-        color: '#D35400',
-        data:[{
-          name: 'Preço Médio',
-          drilldown: 'medio',
-          y:4,
-          color: '#D35400',
-        }]
-      }],
-      
-      /*Cria um gráfico para cada Valor, quando é selecionado anteriormente*/
-      drilldown: {
-        series: [{
-          id:'abertura',
-          name: 'Preço Abertura',
-          data: valoresAbertura,
-          color: 'green',
-        }, {
-          id:'maximo',
-          name: 'Preço Máximo',
-          data: valoresMaximo,
-          color: '#1A5276',
-        }, {
-          id:'minimo',
-          name: 'Preço Mínimo',
-          data: valoresMinimo,
-          color: '#6C3483',
-        },
-        {
-          id:'maximo',
-          name: 'Preço Máximo',
-          data: valoresMaximo,
-          color: '#1A5276',
-        }, {
-          id:'medio',
-          name: 'Preço Médio',
-          data: valoresMedio,
-          color: '#D35400',
-        }]
-      }
-
-    });
+ 
+ /* 
+  * Gráficos **** 
+ 
     var myChart = Highcharts.chart('graficoPrecoAbertura', {
 
+      tooltip:{
+        shared: true,
+        useHTML: true,
+        headerFormat: '<small>{point.key}</small><table>',
+        pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
+            '<td style="text-align: left"><b>{point.y} R$</b></td></tr>',
+        footerFormat: '</table>',
+        valueDecimals: 2,
+        backgroundColor: {
+            linearGradient: [0, 0, 0, 60],
+            stops: [
+                [0, '#FFFFFF'],
+                [1, '#E0E0E0']
+            ]
+        },
+        borderWidth: 1,
+        borderColor: '#AAA'
+      },
+
       title: {
         style: {
           color: 'navy',
@@ -287,6 +168,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
         },
         text: 'Ação - ' + acao,
       },
+
       subtitle: {
         style: {
           color: 'red',
@@ -294,6 +176,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           fontSize: '2em'
         }                
       },
+
       xAxis: {
         type: 'linear',
         allowDecimals: false,
@@ -303,6 +186,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           text: 'Dias'
         }
       },
+
       plotOptions: {
         series: {
           allowPointSelect: true,
@@ -313,11 +197,11 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           text: 'Valores em R$',
           type: 'linear',
         }
-      },
-      /*Box de legenda com as informações de cada Valor, informando que deve-se clicar para obter o valor detalhado de cada preço*/
+      },   
+
       legend: {
         title: {
-          text: 'Preços<br/><span style="font-size: 12px; color: red; font-weight: normal">(Clique ao lado para ESCOLHER um preço)</span>',
+          text: 'Preço',
           style: {
             fontStyle: 'italic',
             fontWeight: 'bold',
@@ -328,6 +212,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
         enabled: true,
         verticalAlign: 'middle'
       },
+
       plotOptions: {
         line: {
           dataLabels: {
@@ -336,7 +221,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           enableMouseTracking: true,
         },
       },
-      /* Imprimir e salvar em imagens o gráfico*/
+      //Imprimir e salvar em imagens o gráfico
       exporting: {
         buttons: {
           contextButton: {
@@ -344,20 +229,35 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           }
         }
       },
-      
-      /*Cria um gráfico para cada Valor, quando é selecionado anteriormente*/
-  
-        series: [{
-          id:'abertura',
-          name: 'Preço Abertura',
-          data: valoresAbertura,
-          color: 'green',
-        }]
-      
 
+      series: [{
+        id:'abertura',
+        name: 'Abertura',
+        data: valoresAbertura,
+        color: 'green',
+      	}]  
     });
 
     var myChart = Highcharts.chart('graficoPrecoMaximo', {
+      
+      tooltip:{
+        shared: true,
+        useHTML: true,
+        headerFormat: '<small>{point.key}</small><table>',
+        pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
+            '<td style="text-align: left"><b>{point.y} R$</b></td></tr>',
+        footerFormat: '</table>',
+        valueDecimals: 2,
+        backgroundColor: {
+            linearGradient: [0, 0, 0, 60],
+            stops: [
+                [0, '#FFFFFF'],
+                [1, '#E0E0E0']
+            ]
+        },
+        borderWidth: 1,
+        borderColor: '#AAA'
+      },
 
       title: {
         style: {
@@ -366,6 +266,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
         },
         text: 'Ação - ' + acao,
       },
+
       subtitle: {
         style: {
           color: 'red',
@@ -373,6 +274,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           fontSize: '2em'
         }                
       },
+
       xAxis: {
         type: 'linear',
         allowDecimals: false,
@@ -382,21 +284,23 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           text: 'Dias'
         }
       },
+
       plotOptions: {
         series: {
           allowPointSelect: true,
         }
       },
+
       yAxis: {
         title: {
           text: 'Valores em R$',
           type: 'linear',
         }
       },
-      /*Box de legenda com as informações de cada Valor, informando que deve-se clicar para obter o valor detalhado de cada preço*/
-      legend: {
+
+       legend: {
         title: {
-          text: 'Preços<br/><span style="font-size: 12px; color: red; font-weight: normal">(Clique ao lado para ESCOLHER um preço)</span>',
+          text: 'Preço',
           style: {
             fontStyle: 'italic',
             fontWeight: 'bold',
@@ -407,6 +311,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
         enabled: true,
         verticalAlign: 'middle'
       },
+
       plotOptions: {
         line: {
           dataLabels: {
@@ -415,7 +320,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           enableMouseTracking: true,
         },
       },
-      /* Imprimir e salvar em imagens o gráfico*/
+      //Imprimir e salvar em imagens o gráfico
       exporting: {
         buttons: {
           contextButton: {
@@ -423,20 +328,36 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           }
         }
       },
-      
-      /*Cria um gráfico para cada Valor, quando é selecionado anteriormente*/
-  
-        series: [{
-          id:'maximo',
-          name: 'Preço Máximo',
-          data: valoresMaximo,
-          color: '#1A5276',
-        }]
-      
 
+      series: [{
+        id:'maximo',
+        name: 'Máximo',
+        data: valoresMaximo,
+        color: '#1A5276',
+      }]
+     
     });
 
     var myChart = Highcharts.chart('graficoPrecoMinimo', {
+      
+      tooltip:{
+        shared: true,
+        useHTML: true,
+        headerFormat: '<small>{point.key}</small><table>',
+        pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
+            '<td style="text-align: left"><b>{point.y} R$</b></td></tr>',
+        footerFormat: '</table>',
+        valueDecimals: 2,
+        backgroundColor: {
+            linearGradient: [0, 0, 0, 60],
+            stops: [
+                [0, '#FFFFFF'],
+                [1, '#E0E0E0']
+            ]
+        },
+        borderWidth: 1,
+        borderColor: '#AAA'
+      },
 
       title: {
         style: {
@@ -445,6 +366,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
         },
         text: 'Ação - ' + acao,
       },
+
       subtitle: {
         style: {
           color: 'red',
@@ -452,6 +374,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           fontSize: '2em'
         }                
       },
+
       xAxis: {
         type: 'linear',
         allowDecimals: false,
@@ -461,21 +384,23 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           text: 'Dias'
         }
       },
+
       plotOptions: {
         series: {
           allowPointSelect: true,
         }
       },
+
       yAxis: {
         title: {
           text: 'Valores em R$',
           type: 'linear',
         }
       },
-      /*Box de legenda com as informações de cada Valor, informando que deve-se clicar para obter o valor detalhado de cada preço*/
+      
       legend: {
         title: {
-          text: 'Preços<br/><span style="font-size: 12px; color: red; font-weight: normal">(Clique ao lado para ESCOLHER um preço)</span>',
+          text: 'Preço',
           style: {
             fontStyle: 'italic',
             fontWeight: 'bold',
@@ -486,6 +411,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
         enabled: true,
         verticalAlign: 'middle'
       },
+
       plotOptions: {
         line: {
           dataLabels: {
@@ -494,7 +420,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           enableMouseTracking: true,
         },
       },
-      /* Imprimir e salvar em imagens o gráfico*/
+      // Imprimir e salvar em imagens o gráfico
       exporting: {
         buttons: {
           contextButton: {
@@ -502,21 +428,36 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           }
         }
       },
-      
-      /*Cria um gráfico para cada Valor, quando é selecionado anteriormente*/
-  
-        series: [{
-          id:'minimo',
-          name: 'Preço Mínimo',
-          data: valoresMinimo,
-          color: '#6C3483',
-        }]
-      
 
+      series: [{
+        id:'minimo',
+        name: 'Mínimo',
+        data: valoresMinimo,
+        color: '#6C3483',
+      }]
     });
 
     var myChart2 = Highcharts.chart('graficoPrecoMedio', {
 
+      tooltip:{
+        shared: true,
+        useHTML: true,
+        headerFormat: '<small>{point.key}</small><table>',
+        pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
+            '<td style="text-align: left"><b>{point.y} R$</b></td></tr>',
+        footerFormat: '</table>',
+        valueDecimals: 2,
+        backgroundColor: {
+            linearGradient: [0, 0, 0, 60],
+            stops: [
+                [0, '#FFFFFF'],
+                [1, '#E0E0E0']
+            ]
+        },
+        borderWidth: 1,
+        borderColor: '#AAA'
+      },
+
       title: {
         style: {
           color: 'navy',
@@ -524,6 +465,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
         },
         text: 'Ação - ' + acao,
       },
+
       subtitle: {
         style: {
           color: 'red',
@@ -531,6 +473,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           fontSize: '2em'
         }                
       },
+
       xAxis: {
         type: 'linear',
         allowDecimals: false,
@@ -540,21 +483,22 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           text: 'Dias'
         }
       },
+
       plotOptions: {
         series: {
           allowPointSelect: true,
         }
       },
+
       yAxis: {
         title: {
           text: 'Valores em R$',
           type: 'linear',
         }
       },
-      /*Box de legenda com as informações de cada Valor, informando que deve-se clicar para obter o valor detalhado de cada preço*/
-      legend: {
+	  legend: {
         title: {
-          text: 'Preços<br/><span style="font-size: 12px; color: red; font-weight: normal">(Clique ao lado para ESCOLHER um preço)</span>',
+          text: 'Preço',
           style: {
             fontStyle: 'italic',
             fontWeight: 'bold',
@@ -565,6 +509,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
         enabled: true,
         verticalAlign: 'middle'
       },
+
       plotOptions: {
         line: {
           dataLabels: {
@@ -573,7 +518,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           enableMouseTracking: true,
         },
       },
-      /* Imprimir e salvar em imagens o gráfico*/
+      //Imprimir e salvar em imagens o gráfico
       exporting: {
         buttons: {
           contextButton: {
@@ -581,19 +526,15 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           }
         }
       },
-      
-      /*Cria um gráfico para cada Valor, quando é selecionado anteriormente*/
-  
-        series: [{
-          id:'maximo',
-          name: 'Preço Médio',
-          data: valoresMedio,
-          color: '#1A5276',
-        }]
-      
 
+      series: [{
+        id:'maximo',
+        name: 'Médio',
+        data: valoresMedio,
+        color: '#1A5276',
+      }]
     });
-
+     */
   });
 }]);
 
