@@ -41,13 +41,13 @@ var monitor = chokidar.watch(dirArquivos, { ignored: /^\./, persistent: true });
 
 /************************************************ SQLITE DB ************************************************/
 function createDb(){
-	console.log('Criando o DB');
 	db = new sqlite3.Database('bovespa.sqlite3', createTable);
+	console.log('Banco de Dados Criado');
 }
 
 function createTable(){
-	console.log('create Table');
 	db.run('CREATE TABLE IF NOT EXISTS bovespa (acao TEXT, data TEXT, preco_abertura REAL, preco_maximo REAL, preco_minimo REAL, preco_medio REAL)');
+	console.log('Tabela bovespa, criada com sucesso!');
 }
 
 function closeDB(){
@@ -57,7 +57,7 @@ function closeDB(){
 
 function insertRows (informacoes_arquivo){
 
-	console.log('insert Rows');
+	console.log('Inciciando Inserção!');
 
 	var stmt = db.prepare ('INSERT INTO bovespa VALUES (?, ?, ?, ?, ?, ?)'); 
 
@@ -71,9 +71,7 @@ function insertRows (informacoes_arquivo){
 			tupla.preco_medio);
 	});
 
-	stmt.finalize();
-	closeDB();
-
+	stmt.finalize(closeDB);
 }
 
 createDb();
@@ -271,6 +269,7 @@ io.on('connection', function(socket){
 
 			});
 
+		   	console.log('Terminou de gravar no vetor!');
 		   	insertRows(informacoes_arquivo);
 
 		});
