@@ -167,6 +167,8 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
 
     var myChart = Highcharts.chart('container', {
 
+
+
         tooltip:{
         shared: true,
         useHTML: true,
@@ -183,27 +185,40 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
             ]
         },
         borderWidth: 1,
+
         borderColor: '#AAA'
       },
 
       title: {
-        text: 'Cotações Históricas Bovespa'
+        style: {
+            color: 'navy',
+            fontWeight: 'bold'
+        },
+        text: 'Cotações Históricas Bovespa',
+
       },
 
       subtitle: {
+        style: {
+            color: 'red',
+            fontFamily: 'Courier New',
+            fontStyle: 'italic',
+            fontSize: '2em'
+        },
         text: 'Ação - '+acao,                
       },
 
       xAxis: {
        type: 'linear',
        allowDecimals: false,
+       crosshair: true,
        categories: diasLanc,
        title: {
         text: 'Dias'
       },
       plotOptions: {
         series: {
-            allowPointSelect: true
+            allowPointSelect: true,
         }
     },
      },
@@ -216,6 +231,12 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
       },
 
       legend: {
+        title: {
+            text: 'Preços<br/><span style="font-size: 9px; color: red; font-weight: normal">(Clique para esconder um preço)</span>',
+            style: {
+                fontStyle: 'italic'
+            }
+        },
         layout: 'vertical',
         align: 'right',
         verticalAlign: 'middle'
@@ -229,6 +250,15 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           enableMouseTracking: true,
         },
       },
+
+      exporting: {
+        buttons: {
+            contextButton: {
+                text: 'Download',             
+            }
+
+        }
+    },
 
       series: [
       {
@@ -258,4 +288,5 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
   
 
 }]);
+
 
