@@ -6,7 +6,6 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
   var uploader = new SocketIOFileUpload(socket);
   var anoSelecionado;
   var mesSelecionado;
-  var acaoSelecionado;
 
   uploader.listenOnInput(document.getElementById("file_input"));
 
@@ -101,8 +100,6 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
 
   $scope.capturaAcaoSelecionada = function(acaoSelecionada){
 
-    console.log(acaoSelecionada);
-
     socket.emit('buscaValores', acaoSelecionada, anoSelecionado, mesSelecionado);
     
   };
@@ -164,8 +161,9 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
     $scope.$apply();
   });
 
-  socket.on('buscaValores', function(valores, acao){
-    $scope.$apply();
+  /* Recebe os valores de acordo com a seleção de ação, ano, mês */
+  socket.on('buscaValores', function(valoresAbertura, valoresMaximo, valoresMinimo, valoresMedio, diasLanc, acao){
+    // $scope.$apply();
 
     var myChart = Highcharts.chart('container', {
 
@@ -174,54 +172,70 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
       },
 
       subtitle: {
-        text: 'Valores de Abertura',                
+        text: 'Ação - '+acao,                
       },
 
       xAxis: {
        type: 'linear',
        allowDecimals: false,
+       categories: diasLanc,
+       title: {
+        text: 'Dias'
+      },
+      plotOptions: {
+        series: {
+            allowPointSelect: true
+        }
+    },
      },
 
-     yAxis: {
-      title: {
-        text: 'Valores em R$',
-        type: 'linear',
-      }
-    },
-
-    legend: {
-      layout: 'vertical',
-      align: 'right',
-      verticalAlign: 'middle'
-    },
-
-    plotOptions: {
-      line: {
-        dataLabels: {
-          enabled: true,
-        },
-        enableMouseTracking: false,
+      yAxis: {
+        title: {
+          text: 'Valores em R$',
+          type: 'linear',
+        }
       },
-    },
-    
-    //Aqui serao inseridas as informações dos valores de abertura
 
+      legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
+      },
 
+      plotOptions: {
+        line: {
+          dataLabels: {
+            enabled: true,
+          },
+          enableMouseTracking: false,
+        },
+      },
 
+      series: [
+      {
+        name: 'Preço Abertura',
+        data: valoresAbertura,
+        color: '#90ed7d'
+      },
+      {
+        name: 'Preço Máximo',
+        data: valoresMaximo,
+        color: '#1A5276'
+      },
+      {
+        name: 'Preço Mínimo',
+        data: valoresMinimo,
+        color: '#6C3483'
+      },
+      {
+        name: 'Preço Médio',
+        data: valoresMedio,
+        color: '#D35400'
+      }],
 
-    series: [{
-      name: acao,
-      data: valores,
-      color: '#90ed7d' ,
-    }]            
     });
 
   });
-
-  // var tst = [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4];
-  
-
-  /* Gráfico */
   
 
 }]);

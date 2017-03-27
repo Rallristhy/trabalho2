@@ -76,25 +76,6 @@ function insertRows (informacoes_arquivo){
 
 }
 
-function queryAcoes(){
-
-	console.log('queryAcoes');
-
-	var i = 0;
-	var acoes = [];
-
-	db.all('SELECT DISTINCT bovespa.acao FROM bovespa', function(err, rows){
-
-		rows.forEach(function ( tupla ) {
-			acoes.push(tupla.acao);
-		});
-
-		io.emit('rall', acoes);
-
-	});
-
-}
-
 createDb();
 
 /***********************************************************************************************************/
@@ -303,6 +284,7 @@ io.on('connection', function(socket){
 
 	var acoesAno = [];
 
+	/* Busca Anos Disponíveis e manda para o client */
 	db.all('SELECT DISTINCT SUBSTR(data, 1, 4) ano FROM bovespa', function(err, rows){
 
 		rows.forEach(function ( tupla ) {
@@ -313,6 +295,7 @@ io.on('connection', function(socket){
 		io.emit('anoAcao', acoesAno);
 	});
 
+	/* Busca Meses Disponíveis com base no ano selecionado e manda para o client */
 	socket.on('buscaMeses', function(ano) {
 
 		var acoesMes = [];
@@ -327,6 +310,7 @@ io.on('connection', function(socket){
 
 	});
 
+	/* Busca Ações Disponíveis com base no ano/mes selecionado e manda para o client */
 	socket.on('buscaAcoes', function(ano, mes) {
 
 		var acoes = [];
@@ -341,17 +325,26 @@ io.on('connection', function(socket){
 
 	});
 
+	/* Busca Valores Disponíveis com base na ação, ano/mes selecionado e manda para o client */
 	socket.on('buscaValores', function(acao, ano, mes) {
 
-		var acoesValores = [];
+		var acoesValoresAbertura = [];
+		var acoesValoresMaximo = [];
+		var acoesValoresMinimo = [];
+		var acoesValoresMedio = [];
+		var acoesDiasLanc = [];
 
 		db.all('SELECT * FROM bovespa WHERE SUBSTR(data, 1, 4) = '+'"'+ano+'" AND SUBSTR(data, 5, 2) = '+'"'+mes+'"'+' AND acao = '+'"'+acao+'" ORDER BY data', function(err, rows){
 		
 			rows.forEach(function ( tupla ) {
-				acoesValores.push(tupla.preco_abertura);
+				acoesValoresAbertura.push(tupla.preco_abertura);
+				acoesValoresMaximo.push(tupla.preco_maximo);
+				acoesValoresMinimo.push(tupla.preco_minimo);
+				acoesValoresMedio.push(tupla.preco_medio);
+				acoesDiasLanc.push(tupla.data.substring(6));
 			});
 
-			io.emit('buscaValores', acoesValores, acao);
+			io.emit('buscaValores', acoesValoresAbertura, acoesValoresMaximo, acoesValoresMinimo, acoesValoresMedio, acoesDiasLanc, acao);
 
 		});
 
