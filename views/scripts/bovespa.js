@@ -165,101 +165,166 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
   socket.on('buscaValores', function(valoresAbertura, valoresMaximo, valoresMinimo, valoresMedio, diasLanc, acao){
     // $scope.$apply();
 
+/* Criação do Gráfico  
+*** NOTA: Ler o arquivo LEIA-ME para detalhes de como utilizar o gráfico ****
+
+*/
     var myChart = Highcharts.chart('container', {
 
-
-
+      /*Exibe uma caixa com legenda de cada informação ao se passar o ponteiro em cima do valor*/
         tooltip:{
-        shared: true,
-        useHTML: true,
-        headerFormat: '<small>{point.key}</small><table>',
-        pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
-            '<td style="text-align: left"><b>{point.y} R$</b></td></tr>',
-        footerFormat: '</table>',
-        valueDecimals: 2,
-        backgroundColor: {
-            linearGradient: [0, 0, 0, 60],
-            stops: [
-                [0, '#FFFFFF'],
-                [1, '#E0E0E0']
-            ]
+            shared: true,
+            useHTML: true,
+            headerFormat: '<small>{point.key}</small><table>',
+            pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
+               '<td style="text-align: left"><b>{point.y} R$</b></td></tr>',
+            footerFormat: '</table>',
+            valueDecimals: 2,
+            backgroundColor: {
+                linearGradient: [0, 0, 0, 60],
+                stops: [
+                    [0, '#FFFFFF'],
+                    [1, '#E0E0E0']
+                ]
+            },
+            borderWidth: 1,
+            borderColor: '#AAA'
         },
-        borderWidth: 1,
-
-        borderColor: '#AAA'
-      },
-
-      title: {
-        style: {
-            color: 'navy',
-            fontWeight: 'bold'
-        },
-        text: 'Cotações Históricas Bovespa',
-
-      },
-
-      subtitle: {
-        style: {
-            color: 'red',
-            fontFamily: 'Courier New',
-            fontStyle: 'italic',
-            fontSize: '2em'
-        },
-        text: 'Ação - '+acao,                
-      },
-
-      xAxis: {
-       type: 'linear',
-       allowDecimals: false,
-       crosshair: true,
-       categories: diasLanc,
-       title: {
-        text: 'Dias'
-      },
-      plotOptions: {
-        series: {
-            allowPointSelect: true,
-        }
-    },
-     },
-
-      yAxis: {
         title: {
-          text: 'Valores em R$',
-          type: 'linear',
-        }
-      },
-
-      legend: {
-        title: {
-            text: 'Preços<br/><span style="font-size: 9px; color: red; font-weight: normal">(Clique para esconder um preço)</span>',
             style: {
-                fontStyle: 'italic'
+                color: 'navy',
+                fontWeight: 'bold'
+            },
+            text: 'Cotações Históricas Bovespa',
+        },
+        subtitle: {
+            style: {
+              color: 'red',
+              fontFamily: 'Courier New',
+              fontStyle: 'italic',
+              fontSize: '2em'
+            },
+            text: 'Ação - '+acao,                
+        },
+        xAxis: {
+            type: 'linear',
+            allowDecimals: false,
+            crosshair: true,
+            categories: diasLanc,
+            title: {
+              text: 'Dias'
             }
         },
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'middle'
-      },
-
-      plotOptions: {
-        line: {
-          dataLabels: {
+        plotOptions: {
+            series: {
+                allowPointSelect: true,
+            }
+        },
+        yAxis: {
+            title: {
+              text: 'Valores em R$',
+              type: 'linear',
+            }
+        },
+        /*Box de legenda com as informações de cada Valor, informando que deve-se clicar para obter o valor detalhado de cada preço*/
+        legend: {
+            title: {
+                text: 'Preços<br/><span style="font-size: 12px; color: red; font-weight: normal">(Clique ao lado para ESCOLHER um preço)</span>',
+                style: {
+                    fontStyle: 'italic',
+                    fontWeight: 'bold',
+                }
+            },
+            layout: 'vertical',
+            align: 'right',
             enabled: true,
-          },
-          enableMouseTracking: true,
+            verticalAlign: 'middle'
         },
-      },
-
-      exporting: {
-        buttons: {
-            contextButton: {
-                text: 'Download',             
+        plotOptions: {
+            line: {
+                dataLabels: {
+                  enabled: true,
+                },
+                enableMouseTracking: true,
+            },
+        },
+        /* Imprimir e salvar em imagens o gráfico*/
+        exporting: {
+            buttons: {
+                contextButton: {
+                    text: 'Download',             
+                }
             }
-
+        },
+        /*Cria o primeiro gráfico com os Valores Ilustrativos, para serem clicados*/
+        series: [{
+          name: 'Preço de Abertura',
+            data:[{
+                name: 'Preço Abertura',
+                drilldown: 'abertura',
+                y:2,
+                color: 'green',
+              }]
+              },
+               {
+            name: 'Preço Maximo',
+              data:[{
+                name: 'Preço Máximo',
+                drilldown: 'maximo',
+                y : 5,
+                color: '#1A5276',
+              }]
+              },
+              {
+              name: 'Preço Minimo',
+                data:[{
+                name: 'Preço Mínimo',
+                drilldown: 'minimo',
+                y:1,
+                color: '#6C3483',
+              }]
+              },
+              {
+              name:'Preço Medio',
+                data:[{
+                name: 'Preço Médio',
+                drilldown: 'medio',
+                y:3,
+                color: '#D35400',
+              }]
+          }],
+          /*Cria um gráfico para cada Valor, quando é selecionado anteriormente*/
+          drilldown: {
+            series: [{
+                id:'abertura',
+                    name: 'Preço Abertura',
+                    data: valoresAbertura,
+                    color: 'green',
+            }, {
+                id:'maximo',
+                    name: 'Preço Máximo',
+                    data: valoresMaximo,
+                    color: '#1A5276',
+            }, {
+                id:'minimo',
+                    name: 'Preço Mínimo',
+                    data: valoresMinimo,
+                    color: '#6C3483',
+              },
+              {
+                id:'maximo',
+                    name: 'Preço Máximo',
+                    data: valoresMaximo,
+                    color: '#1A5276',
+            }, {
+                id:'medio',
+                    name: 'Preço Médio',
+                    data: valoresMedio,
+                    color: '#D35400',
+            }]
         }
-    },
 
+ /* GRAFICO UNICO DE LINHA 
       series: [
       {
         name: 'Preço Abertura',
@@ -281,12 +346,9 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
         data: valoresMedio,
         color: '#D35400'
       }],
-
+*/
     });
-
   });
-  
-
 }]);
 
 
