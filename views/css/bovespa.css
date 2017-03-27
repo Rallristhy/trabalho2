@@ -13,7 +13,7 @@
 
 
 body {
-	background: #E8E8E8;
+	background: white;
 }
 /* Style Header */
 header {
@@ -30,7 +30,8 @@ header .container {
 }
 
 header .rowHeader {
-	margin-top: 45px;
+	margin-top: 22px;
+    text-align: center;
 	color: white;
 	font-family: "OpenSans-Light";
 	text-shadow: 2px 2px 2px rgba(0, 0, 0, .45);
@@ -40,17 +41,6 @@ header .rowHeader {
 
 header select {
 	color: rgba(9, 79, 125, 1);
-}
-
-header li {
-	list-style-type: none;
-}
-
-/* Style Header */
-section {
-	position: relative;
-	padding-top: 0px;
-	
 }
 
 section .selecionaArquivo {
@@ -82,23 +72,14 @@ section label.selecionaArquivo-icon, select {
     margin-right: 15px;
 }
 
-section .table{
-	background: linear-gradient(to left, white, white );
-
-}
-
 section .thead-inverse{
 	color: white;
 	background-color: black;
-
-
 }
 
 section.chart{
-	
     position: relative;
     padding-top:20px;
-   
 }
 
 
@@ -133,6 +114,7 @@ section .containernotificacoes {
 }
 
 section .dropdown-menu {
+    height: 100%;
     position:absolute;
     right:0px;
     left: -52px;

@@ -17,14 +17,12 @@
 	<script src="node_modules/socketio-file-upload/client.js"></script>
   	<script src="views/scripts/bovespa.js"></script>
   	<script src="socket.io/socket.io.js"></script>
-<!-- <<<<<<< HEAD
+
    	<script src="bower_components/highcharts/highcharts.js"></script>
-   	<script src="views/scripts/gray.js"></script>
-======= -->
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-   	<script src="https://code.highcharts.com/highcharts.js"></script>
-   	<script src="http://code.highcharts.com/modules/exporting.js"></script>
-   	<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+
+
+   	<script src="bower_components/highcharts/modules/exporting.js"></script>
+   	<script src="bower_components/highcharts/modules/drilldown.js"></script>
 
   	<title>Bovespa</title>
 
@@ -35,39 +33,9 @@
 
 		<div class="container">
 			<div class="row rowHeader">
-				<ul>
-					<li ng-repeat="header in dataHeader.bovespaHeaderData">
-						
-						<div class="nome col-xs-6 col-md-6 col-lg-6">
-							<p>
-								<i class="fa fa-arrow-circle-right"></i>
-								<label>Nome do Arquivo: </label>
-								<small>{{header.h_nome_arquivo}}</small>
-
-							</p>
-						</div>
-						
-						<div class="origem col-xs-6 col-md-6 col-lg-6">
-							<p>
-								<i class="fa fa-arrow-circle-right"></i>
-								<label>Cod. Origem: </label>
-								<small>{{header.h_codigo_da_origem}}</small>
-							</p>
-						</div>
-
-						<!-- <button type="button" onclick="select.html">Click Me!</button> -->
-				
-
-						<div class="data col-xs-12 col-md-12 col-lg-12">
-							<p>
-								<i class="fa fa-calendar" ></i>
-								<label>Data Geracao: </label>
-								<small>{{header.h_data_geracao_do_arquivo}}</small>
-							</p>
-						</div>
-
-					</li>
-				</ul>
+				<div class="nome col-xs-12 col-md-12 col-lg-12">
+						<h1>Cotações Históricas Bovespa</h1>
+				</div>	
 			</div>
 		</div>
 
@@ -110,7 +78,7 @@
 
 						<label for='file_input' class="btn btn-primary btn-file botaofile" >
 							<i class="fa fa-folder-open-o" aria-hidden="true"></i>
-							<input type="file" class="file-up" id="file_input" multiple="true" />
+							<input type="file" class="file-up" id="file_input" multiple="false" />
 							<span><progress class="progresso" ng-model="progresso" value={{progresso}} max="100"></progress></span>
 						</label>
 					</i>
@@ -140,7 +108,7 @@
 		
 	</section>
 
-	<footer>
+	<footer class="navbar navbar-fixed-bottom">
 	
 		<div class="container rodape">
 
