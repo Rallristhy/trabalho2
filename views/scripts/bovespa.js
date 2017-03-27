@@ -204,7 +204,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           }
         }
       },
-      /*Cria o primeiro gráfico com os Valores Ilustrativos, para serem clicados*/
+      // Cria o primeiro gráfico com os Valores Ilustrativos, para serem clicados
       series: [{
         name: '1 - Preço de Abertura',
         color: 'green',
@@ -277,6 +277,322 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
       }
 
     });
+    var myChart = Highcharts.chart('graficoPrecoAbertura', {
+
+      title: {
+        style: {
+          color: 'navy',
+          fontWeight: 'bold'
+        },
+        text: 'Ação - ' + acao,
+      },
+      subtitle: {
+        style: {
+          color: 'red',
+          fontFamily: 'Courier New',
+          fontSize: '2em'
+        }                
+      },
+      xAxis: {
+        type: 'linear',
+        allowDecimals: false,
+        crosshair: true,
+        categories: diasLanc,
+        title: {
+          text: 'Dias'
+        }
+      },
+      plotOptions: {
+        series: {
+          allowPointSelect: true,
+        }
+      },
+      yAxis: {
+        title: {
+          text: 'Valores em R$',
+          type: 'linear',
+        }
+      },
+      /*Box de legenda com as informações de cada Valor, informando que deve-se clicar para obter o valor detalhado de cada preço*/
+      legend: {
+        title: {
+          text: 'Preços<br/><span style="font-size: 12px; color: red; font-weight: normal">(Clique ao lado para ESCOLHER um preço)</span>',
+          style: {
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+          }
+        },
+        layout: 'vertical',
+        align: 'right',
+        enabled: true,
+        verticalAlign: 'middle'
+      },
+      plotOptions: {
+        line: {
+          dataLabels: {
+            enabled: true,
+          },
+          enableMouseTracking: true,
+        },
+      },
+      /* Imprimir e salvar em imagens o gráfico*/
+      exporting: {
+        buttons: {
+          contextButton: {
+            text: 'Download',             
+          }
+        }
+      },
+      
+      /*Cria um gráfico para cada Valor, quando é selecionado anteriormente*/
+  
+        series: [{
+          id:'abertura',
+          name: 'Preço Abertura',
+          data: valoresAbertura,
+          color: 'green',
+        }]
+      
+
+    });
+
+    var myChart = Highcharts.chart('graficoPrecoMaximo', {
+
+      title: {
+        style: {
+          color: 'navy',
+          fontWeight: 'bold'
+        },
+        text: 'Ação - ' + acao,
+      },
+      subtitle: {
+        style: {
+          color: 'red',
+          fontFamily: 'Courier New',
+          fontSize: '2em'
+        }                
+      },
+      xAxis: {
+        type: 'linear',
+        allowDecimals: false,
+        crosshair: true,
+        categories: diasLanc,
+        title: {
+          text: 'Dias'
+        }
+      },
+      plotOptions: {
+        series: {
+          allowPointSelect: true,
+        }
+      },
+      yAxis: {
+        title: {
+          text: 'Valores em R$',
+          type: 'linear',
+        }
+      },
+      /*Box de legenda com as informações de cada Valor, informando que deve-se clicar para obter o valor detalhado de cada preço*/
+      legend: {
+        title: {
+          text: 'Preços<br/><span style="font-size: 12px; color: red; font-weight: normal">(Clique ao lado para ESCOLHER um preço)</span>',
+          style: {
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+          }
+        },
+        layout: 'vertical',
+        align: 'right',
+        enabled: true,
+        verticalAlign: 'middle'
+      },
+      plotOptions: {
+        line: {
+          dataLabels: {
+            enabled: true,
+          },
+          enableMouseTracking: true,
+        },
+      },
+      /* Imprimir e salvar em imagens o gráfico*/
+      exporting: {
+        buttons: {
+          contextButton: {
+            text: 'Download',             
+          }
+        }
+      },
+      
+      /*Cria um gráfico para cada Valor, quando é selecionado anteriormente*/
+  
+        series: [{
+          id:'maximo',
+          name: 'Preço Máximo',
+          data: valoresMaximo,
+          color: '#1A5276',
+        }]
+      
+
+    });
+
+    var myChart = Highcharts.chart('graficoPrecoMinimo', {
+
+      title: {
+        style: {
+          color: 'navy',
+          fontWeight: 'bold'
+        },
+        text: 'Ação - ' + acao,
+      },
+      subtitle: {
+        style: {
+          color: 'red',
+          fontFamily: 'Courier New',
+          fontSize: '2em'
+        }                
+      },
+      xAxis: {
+        type: 'linear',
+        allowDecimals: false,
+        crosshair: true,
+        categories: diasLanc,
+        title: {
+          text: 'Dias'
+        }
+      },
+      plotOptions: {
+        series: {
+          allowPointSelect: true,
+        }
+      },
+      yAxis: {
+        title: {
+          text: 'Valores em R$',
+          type: 'linear',
+        }
+      },
+      /*Box de legenda com as informações de cada Valor, informando que deve-se clicar para obter o valor detalhado de cada preço*/
+      legend: {
+        title: {
+          text: 'Preços<br/><span style="font-size: 12px; color: red; font-weight: normal">(Clique ao lado para ESCOLHER um preço)</span>',
+          style: {
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+          }
+        },
+        layout: 'vertical',
+        align: 'right',
+        enabled: true,
+        verticalAlign: 'middle'
+      },
+      plotOptions: {
+        line: {
+          dataLabels: {
+            enabled: true,
+          },
+          enableMouseTracking: true,
+        },
+      },
+      /* Imprimir e salvar em imagens o gráfico*/
+      exporting: {
+        buttons: {
+          contextButton: {
+            text: 'Download',             
+          }
+        }
+      },
+      
+      /*Cria um gráfico para cada Valor, quando é selecionado anteriormente*/
+  
+        series: [{
+          id:'minimo',
+          name: 'Preço Mínimo',
+          data: valoresMinimo,
+          color: '#6C3483',
+        }]
+      
+
+    });
+
+    var myChart2 = Highcharts.chart('graficoPrecoMedio', {
+
+      title: {
+        style: {
+          color: 'navy',
+          fontWeight: 'bold'
+        },
+        text: 'Ação - ' + acao,
+      },
+      subtitle: {
+        style: {
+          color: 'red',
+          fontFamily: 'Courier New',
+          fontSize: '2em'
+        }                
+      },
+      xAxis: {
+        type: 'linear',
+        allowDecimals: false,
+        crosshair: true,
+        categories: diasLanc,
+        title: {
+          text: 'Dias'
+        }
+      },
+      plotOptions: {
+        series: {
+          allowPointSelect: true,
+        }
+      },
+      yAxis: {
+        title: {
+          text: 'Valores em R$',
+          type: 'linear',
+        }
+      },
+      /*Box de legenda com as informações de cada Valor, informando que deve-se clicar para obter o valor detalhado de cada preço*/
+      legend: {
+        title: {
+          text: 'Preços<br/><span style="font-size: 12px; color: red; font-weight: normal">(Clique ao lado para ESCOLHER um preço)</span>',
+          style: {
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+          }
+        },
+        layout: 'vertical',
+        align: 'right',
+        enabled: true,
+        verticalAlign: 'middle'
+      },
+      plotOptions: {
+        line: {
+          dataLabels: {
+            enabled: true,
+          },
+          enableMouseTracking: true,
+        },
+      },
+      /* Imprimir e salvar em imagens o gráfico*/
+      exporting: {
+        buttons: {
+          contextButton: {
+            text: 'Download',             
+          }
+        }
+      },
+      
+      /*Cria um gráfico para cada Valor, quando é selecionado anteriormente*/
+  
+        series: [{
+          id:'maximo',
+          name: 'Preço Médio',
+          data: valoresMedio,
+          color: '#1A5276',
+        }]
+      
+
+    });
+
   });
 }]);
 
