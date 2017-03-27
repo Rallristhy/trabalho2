@@ -140,26 +140,6 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
     /* Criação do Gráfico */
     var myChart = Highcharts.chart('container', {
 
-      /*Exibe uma caixa com legenda de cada informação ao se passar o ponteiro em cima do valor
-      tooltip:{
-        shared: true,
-        useHTML: true,
-        headerFormat: '<small>{point.key}</small><table>',
-        pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
-        '<td style="text-align: left"><b>{point.y} R$</b></td></tr>',
-        footerFormat: '</table>',
-        valueDecimals: 2,
-        backgroundColor: {
-          linearGradient: [0, 0, 0, 60],
-          stops: [
-          [0, '#FFFFFF'],
-          [1, '#E0E0E0']
-          ]
-        },
-        borderWidth: 1,
-        borderColor: '#AAA'
-      },
-       */
       title: {
         style: {
           color: 'navy',
