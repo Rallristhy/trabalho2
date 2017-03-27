@@ -177,7 +177,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
       /*Box de legenda com as informações de cada Valor, informando que deve-se clicar para obter o valor detalhado de cada preço*/
       legend: {
         title: {
-          text: 'Preços<br/><span style="font-size: 12px; color: red; font-weight: normal">(Clique ao lado para ESCOLHER um preço)</span>',
+          text: 'Preços<br/><span style="font-size: 10px; color: red; font-weight: normal">(Clique ao lado para ESCOLHER um preço)</span>',
           style: {
             fontStyle: 'italic',
             fontWeight: 'bold',
@@ -245,6 +245,7 @@ angular.module('bovespaApp', ['angularUtils.directives.dirPagination']).controll
           color: '#D35400',
         }]
       }],
+      
       /*Cria um gráfico para cada Valor, quando é selecionado anteriormente*/
       drilldown: {
         series: [{
